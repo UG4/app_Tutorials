@@ -12,7 +12,7 @@
 
 -- We will include a script file which defines some methods often used.
 -- Loaded methods are all found in the library util.
-ug_load_script("../ug_util.lua")
+ug_load_script("ug_util.lua")
 
 -- To keep the script flexible we will now define some variables which have
 -- a default value that can be overwritten by command line arguments.
@@ -40,10 +40,11 @@ dom = Domain()
 
 -- Now that we have a domain, we can load a grid into it. We check the return
 -- value whether the loading was successful or not.
--- Note that we use the method LoadDomain instead of LoadDomain. utilLoadDomain
--- has the benefit that grids are automatically searched in the data/grids folder if
--- they were not found at the default locations (execution-path or a path specified
--- in your environments path-variable).
+-- Note that LoadDomain first tries to load the grid relative to the path in
+-- which the currently executed script lies. If it isn't found there, then
+-- LoadDomain tries to load the grid by interpreting the filename as an
+-- absolute path. If this doesn't work either, then the LoadDomain tries to
+-- load the grid relative to the grid-path (normally trunk/data/grids).
 if LoadDomain(dom, gridName) == false then
 	print("Loading of domain " .. gridName .. " failed. Aborting.")
 --	call exit to leave the application right away.

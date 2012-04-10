@@ -8,7 +8,7 @@
 
 -- We will include a script file which defines some methods often used.
 -- Loaded methods are all found in the library util.
-ug_load_script("../ug_util.lua")
+ug_load_script("ug_util.lua")
 
 -- To keep the script flexible we will now define some variables which have
 -- a default value that can be overwritten by command line arguments.

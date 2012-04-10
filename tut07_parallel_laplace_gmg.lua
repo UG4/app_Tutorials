@@ -7,7 +7,7 @@
 -- are e.g. created when a tree-like distribution is performed.
 --------------------------------------------------------------------------------
 -- include the basic util-methods.
-ug_load_script("../ug_util.lua")
+ug_load_script("ug_util.lua")
 
 -- Get the command line parameters
 dim = util.GetParamNumber("-dim", 2)

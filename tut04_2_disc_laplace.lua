@@ -12,7 +12,7 @@
 --------------------------------------------------------------------------------
 
 -- include the basic util-methods.
-ug_load_script("../ug_util.lua")
+ug_load_script("ug_util.lua")
 
 
 --------------------------------------------------------------------------------
@@ -58,6 +58,8 @@ ug_load_script("../ug_util.lua")
 -- Returns:
 --	 * AssembledLinearOperator: The assembled Linear operator A.
 --   * ApproximationSpace: The underlying approximation space.
+--	 * The DomainDiscretization object
+--	 * A DirichletBoundary object (already registered at the domain)
 --
 function AssembleLaplace(dom, innerSubsets, boundarySubsets, b,
 						cbDiffTensorName, cbRhsName, cbDirichletBndName)

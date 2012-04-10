@@ -14,7 +14,7 @@
 
 -- We will include a script file which defines some methods often used.
 -- Loaded methods are all found in the library util.
-ug_load_script("../ug_util.lua")
+ug_load_script("ug_util.lua")
 
 -- To keep the script flexible we will now define some variables which have
 -- a default value that can be overwritten by command line arguments.
@@ -46,10 +46,11 @@ dom = Domain()
 
 -- Now that we have a domain, we can load a grid into it. We check the return
 -- value whether the loading was successful or not.
--- Note that we use the method utilLoadDomain instead of LoadDomain. utilLoadDomain
--- has the benefit that grids are automatically searched in the data/grids folder if
--- they were not found at the default locations (execution-path or a path specified
--- in your environments path-variable).
+-- Note that LoadDomain first tries to load the grid relative to the path in
+-- which the currently executed script lies. If it isn't found there, then
+-- LoadDomain tries to load the grid by interpreting the filename as an
+-- absolute path. If this doesn't work either, then the LoadDomain tries to
+-- load the grid relative to the grid-path (normally trunk/data/grids).
 if LoadDomain(dom, gridName) == false then
 	print("Loading of domain " .. gridName .. " failed. Aborting.")
 --	call exit to leave the application right away.
@@ -90,17 +91,12 @@ print("Saved domain to " .. outFileName)
 -- handler. It is filled during LoadDomain. Since our algorithms later on
 -- require that an "Inner" and a "Boundary" subset exists, we check here
 -- for their existance and exit if they are not present.
--- We obtain the subset handler from the domain-object. Note that we use
--- the : operator to access member methods of an object.
-sh = dom:subset_handler()
-if sh:get_subset_index("Inner") == -1 then
-	print("Domain does not contain subset 'Inner'. Aborting.")
-	exit()
-end
-
-if sh:get_subset_index("Boundary") == -1 then
-	print("Domain does not contain subset 'Boundary'. Aborting.")
-	exit()
+-- We use a utility method which is declared in ug_util.lua (trunk/scripts/ug_util.lua)
+-- to check whether all required subsets are present in the current domain.
+requiredSubsets = {"Inner", "Boundary"}
+if util.CheckSubsets(dom, requiredSubsets) == false then 
+   print("Subsets missing. Aborting")
+   exit()
 end
 
 -- For the laplace problem we need a right hand side (rhs), a diffusion tensor.
@@ -215,9 +211,9 @@ elemDisc:set_source("ourRhs"..dim.."d")						-- set the right hand side
 -- a boolean and a number are returned.
 dirichletCallback = LuaBoundaryNumber("ourDirichletBnd" .. dim .. "d")
 
--- Here we set up such a dirichlet boundary condition. We explicitly
--- add subsets on which the boundary callback defined above shall be
--- applied to a given function (as defined in the approximation space).
+-- Here we set up such a dirichlet boundary condition. We specify the function
+-- names and the subsets for which the boundary condition shall apply. The function
+-- names have to correspond to the functions added to the approximation space above.
 dirichletBnd = DirichletBoundary()
 dirichletBnd:add(dirichletCallback, "c", "Boundary")
 
@@ -231,16 +227,15 @@ domainDisc:add(dirichletBnd)
 -- The discretization itself is now completely prepared. It is now time
 -- to assemble a matrix from it. To keep things general, we do not
 -- create a matrix but a linear operator which represents an assembled system
--- (in most cases of course this will be a matrix).
+-- (in most cases this will be a matrix).
 linOp = AssembledLinearOperator()
 -- the discretization object from which the operator is assembled
 linOp:set_discretization(domainDisc)
 
 -- Now lets solve the problem. Create a vector of unknowns and a vector
 -- which contains the right hand side. We will use the approximation space
--- to create the vectors. Make sure to create the vector for the same
--- dofs as set to linOp through linOp:set_dof_distribution.
--- Note that the vectors automatically have the right size.
+-- to create the vectors
+-- Note that the vectors automatically have the right size to be compatible with linOp.
 u = GridFunction(approxSpace)
 b = GridFunction(approxSpace)
 
@@ -257,9 +252,8 @@ u:set(0)
 -- we simply use the LU solver.
 -- But be careful... if we are in a parallel environment, the LU decomposition
 -- will not work. We use GetNumProcesses() to retrieve the number of active processes.
-
 if GetNumProcesses() > 1 then
-	print("Can't apply LU decomposition in parallel environment. Aborting.")
+	print("Can't apply LU decomposition in a parallel environment. Aborting.")
 	exit()
 end
 

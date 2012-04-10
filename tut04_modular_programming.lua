@@ -19,7 +19,7 @@
 --------------------------------------------------------------------------------
 
 -- include the basic util-methods.
-ug_load_script("../ug_util.lua")
+ug_load_script("ug_util.lua")
 
 -- include the files in which we defined our helper methods
 ug_load_script("tut04_1_domain_util.lua")
