@@ -308,7 +308,7 @@ function ourDirichletBnd3d(x, y, z, t)
 end
 
 -- ... and wrap it into a lua-callback
-dirichletCallback = LuaBoundaryNumber("ourDirichletBnd" .. dim .. "d")
+dirichletCallback = LuaCondUserNumber("ourDirichletBnd" .. dim .. "d")
 
 -- lets setup the dirichlet values as explained in the previous tutorials
 dirichletBnd = DirichletBoundary()

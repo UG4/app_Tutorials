@@ -207,9 +207,9 @@ elemDisc:set_source("ourRhs"..dim.."d")						-- set the right hand side
 -- first we create objects that encapsulate our callbacks. Those can then
 -- be registered at the discretization object. Note that we use the .. operator
 -- to concatenate strings and numbers. This saves us from a lot of if dim == 2 ... else ...
--- For the dirichlet callback we use utilCreateLuaBoundaryNumber, since here
+-- For the dirichlet callback we use utilCreateLuaCondUserNumber, since here
 -- a boolean and a number are returned.
-dirichletCallback = LuaBoundaryNumber("ourDirichletBnd" .. dim .. "d")
+dirichletCallback = LuaCondUserNumber("ourDirichletBnd" .. dim .. "d")
 
 -- Here we set up such a dirichlet boundary condition. We specify the function
 -- names and the subsets for which the boundary condition shall apply. The function
