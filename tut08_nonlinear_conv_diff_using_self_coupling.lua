@@ -418,7 +418,6 @@ InterpolateFunction(LuaStartValue, u, "c", time);
 -- problems we start a time series. This is necessary to group the time 
 -- series at the end of the time loop. We write the start solution at the beginning.
 out = VTKOutput()
-out:begin_timeseries("Solution", u)
 out:print("Solution", u, step, time)
 
 -- Since we use a one-step scheme, we need one extra solution vector to store
@@ -471,7 +470,7 @@ end
 -- At the end of the time loop, we finish our time series. This produces a
 -- grouping "Solution.pvd" file, that containes all time steps and can be
 -- opened by a viewer like Paraview.
-out:end_timeseries("Solution", u)
+out:write_time_pvd("Solution", u)
 
 
 print("")
