@@ -104,7 +104,7 @@ function AssembleLaplace(dom, innerSubsets, boundarySubsets, b,
 		upwind = NoUpwind3d() -- create an upwind procedure ("No Upwind")
 	end
 	elemDisc:set_upwind(upwind)  -- set the upwind procedure
-	elemDisc:set_diffusion_tensor(cbDiff)	-- set the diffusion matrix
+	elemDisc:set_diffusion(cbDiff)	-- set the diffusion matrix
 	elemDisc:set_source(cbRhs)					-- set the right hand side
 	
 	local dirichletBnd = DirichletBoundary()

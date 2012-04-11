@@ -280,11 +280,11 @@ linkedDiffTensor:set_input(0, elemDisc:value())
 -- Now we have to choose, which coefficients to use. Out of the created 
 -- data objects we can choose. E.g. for the Diffusion matrix, we have 
 -- the three choices, created above. We pick one ...
-elemDisc:set_diffusion_tensor(linkedDiffTensor)	-- set linker diffusion matrix
+elemDisc:set_diffusion(linkedDiffTensor)	-- set linker diffusion matrix
 
 -- ... we could also have used these two possibilities
---elemDisc:set_diffusion_tensor(constDiffTensor)	-- set const diffusion matrix
---elemDisc:set_diffusion_tensor(luaDiffTensorCallback)	-- set lua diffusion matrix
+--elemDisc:set_diffusion(constDiffTensor)	-- set const diffusion matrix
+--elemDisc:set_diffusion(luaDiffTensorCallback)	-- set lua diffusion matrix
 
 
 -- we add also the other coefficients

@@ -192,7 +192,7 @@ upwind = WeightedUpwind(); upwind:set_weight(0.0)
 elemDisc = ConvectionDiffusion("c", "Inner")
 elemDisc:set_disc_scheme("fv1")
 elemDisc:set_upwind(upwind)
-elemDisc:set_diffusion_tensor("ourDiffTensor"..dim.."d")	-- set the diffusion matrix
+elemDisc:set_diffusion("ourDiffTensor"..dim.."d")	-- set the diffusion matrix
 elemDisc:set_source("ourRhs"..dim.."d")						-- set the right hand side
 
 -- Note that the dirichlet boundary callback was not registered at the
