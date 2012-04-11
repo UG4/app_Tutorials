@@ -6,6 +6,10 @@
 --	This file contains the method CreateAndDistributeDomain.
 --	The method which will create a domain, load the associated
 --	geometry from a file and distriutes it onto all active processes.
+--	Please note, that this could also be achieved with the method
+--	util.CreateAndDistributeDomain(gridName, numRefs, numPreRefs, neededSubsets),
+--	which is a little more elaborated, since it also supports refienement
+--	(before and after distribution).
 --------------------------------------------------------------------------------
 
 -- include the basic util-methods.
@@ -13,18 +17,17 @@ ug_load_script("ug_util.lua")
 
 
 --------------------------------------------------------------------------------
---	The method loads creates a new domain with the given dimension (dim),
---	loads the grid specidied in gridName, distributes it to all active
---	processes and finally, if savePrefix ~= nil, it will save the received
---	grid on each process to a file with name:
---	savePrefix .. "_" .. GetProcessRank() .. ".ugx"
+--	The method loads creates a new domain, loads the grid specified in gridName,
+--	distributes it to all active processes and checks, whether all processes
+--	received the required subsets.
+--	
 --	If everything went right, the method returns the created domain object,
 --	if an error occured, nil is returned.
 --	
---	Params: string gridName, int dim, string savePrefix
+--	Params: string gridName, string-array requiredSubsets
 --	Returns: Domain
 --
-function CreateAndDistributeDomain(gridName, dim, savePrefix)
+function CreateAndDistributeDomain(gridName, requiredSubsets)
 --	Create the domain object
 	local dom = Domain()
 	
@@ -41,11 +44,10 @@ function CreateAndDistributeDomain(gridName, dim, savePrefix)
 		return nil
 	end
 	
---	If a savePrefix was specified, we'll save the domain on each process
-	if savePrefix ~= nil then
-		local outFileName = savePrefix .. "_" .. GetProcessRank() .. ".ugx"
-		if SaveDomain(dom, outFileName) == false then
-			print("Saving of domain to " .. outFileName .. " failed.")
+--	Check whether each process received the required subsets
+	if requiredSubsets ~= nil then
+		if util.CheckSubsets(dom, requiredSubsets) == false then 
+			print("Something wrong with required subsets. Aborting.");
 			return nil
 		end
 	end

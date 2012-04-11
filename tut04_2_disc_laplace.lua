@@ -70,7 +70,7 @@ function AssembleLaplace(dom, innerSubsets, boundarySubsets, b,
 	local approxSpace = ApproximationSpace(dom) -- creates new object
 	approxSpace:add_fct("c", "Lagrange", 1)          -- adds one function
 	approxSpace:print_statistic()                    -- write some information
-	
+
 --	initialize the callbacks. If callbacks were specified, use them. If not,
 --	use the default callbacks.
 	local tmpDiffCBName = cbDiffTensorName
@@ -86,29 +86,17 @@ function AssembleLaplace(dom, innerSubsets, boundarySubsets, b,
 	local tmpBndCBName = cbDirichletBndName
 	if tmpBndCBName == nil then
 		tmpBndCBName = "LaplaceDefaults_DirichletBnd" .. dim .. "d"
-	end
-
-	local cbDiff = LuaUserMatrix(tmpDiffCBName)
-	local cbRhs = LuaUserNumber(tmpRhsCBName)
-	local cbBnd = LuaBoundaryNumber(tmpBndCBName)
-	
+	end	
 	
 --	set up the discretization
 	local elemDisc = ConvectionDiffusion("c", innerSubsets)
 	elemDisc:set_disc_scheme("fv1")
-	if dim == 1 then
-		upwind = NoUpwind1d() -- create an upwind procedure ("No Upwind")
-	elseif dim == 2 then
-		upwind = NoUpwind2d() -- create an upwind procedure ("No Upwind")
-	elseif dim == 3 then
-		upwind = NoUpwind3d() -- create an upwind procedure ("No Upwind")
-	end
-	elemDisc:set_upwind(upwind)  -- set the upwind procedure
-	elemDisc:set_diffusion(cbDiff)	-- set the diffusion matrix
-	elemDisc:set_source(cbRhs)					-- set the right hand side
+	elemDisc:set_upwind(NoUpwind())			 		-- set the upwind procedure
+	elemDisc:set_diffusion_tensor(tmpDiffCBName)	-- set the diffusion matrix callback
+	elemDisc:set_source(tmpRhsCBName)				-- set the right hand side callback
 	
 	local dirichletBnd = DirichletBoundary()
-	dirichletBnd:add(cbBnd, "c", boundarySubsets)
+	dirichletBnd:add(tmpBndCBName, "c", boundarySubsets)
 	
 	local domainDisc = DomainDiscretization(approxSpace)
 	domainDisc:add(elemDisc)
@@ -118,8 +106,6 @@ function AssembleLaplace(dom, innerSubsets, boundarySubsets, b,
 --	create the linear operator
 	local linOp = AssembledLinearOperator()
 	linOp:set_discretization(domainDisc)
-
-	linOp:init_op_and_rhs(b)
 
 	return linOp, approxSpace, domainDisc, dirichletBnd
 end

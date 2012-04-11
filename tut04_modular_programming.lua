@@ -35,16 +35,12 @@ dim = util.GetParamNumber("-dim", 2)
 InitUG(dim, AlgebraType("CPU", 1))
 
 gridName = util.GetParam("-grid", "unit_square/unit_square_quads_8x8.ugx")
-outFileNamePrefix = util.GetParam("-o", "distributed_domain_")
 
 
 -- Create the domain through the CreateAndDistributeDomain method,
 -- which we created in tut04_1_domain_util.lua
-dom = CreateAndDistributeDomain(gridName, dim, outFileNamePrefix) 
-
--- Create surface functions (vectors) for Au=b (where A=linOp) and initialize them
-u = GridFunction(approxSpace)
-b = GridFunction(approxSpace)
+requiredSubsets = {"Inner", "Boundary"}
+dom = CreateAndDistributeDomain(gridName, requiredSubsets) 
 
 -- Using the AssembleLaplace method which we created in
 -- tut04_2_disc_laplace.lua, we now create the linear operator.
@@ -56,7 +52,11 @@ b = GridFunction(approxSpace)
 -- Make sure that you use the ones with the right dimension!
 linOp, approxSpace = AssembleLaplace(dom, "Inner", "Boundary", b, nil, nil, nil, nil)
 
+-- Create surface functions (vectors) for Au=b (where A=linOp) and initialize them
+u = GridFunction(approxSpace)
+b = GridFunction(approxSpace)
 u:set(0)
+linOp:init_op_and_rhs(b)
 
 -- We again choose the LU solver and make sure that it is only used in a
 -- serial environment
