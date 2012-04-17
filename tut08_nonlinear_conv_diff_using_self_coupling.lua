@@ -61,11 +61,7 @@ dom = Domain()
 -- has the benefit that grids are automatically searched in the data/grids folder if
 -- they were not found at the default locations (execution-path or a path specified
 -- in your environments path-variable).
-if LoadDomain(dom, gridName) == false then
-	print("Loading of domain " .. gridName .. " failed. Aborting.")
---	call exit to leave the application right away.
-	exit() 
-end
+LoadDomain(dom, gridName)
 
 -- Now that we're here, the domain was successfully loaded
 print("Loaded domain from " .. gridName)

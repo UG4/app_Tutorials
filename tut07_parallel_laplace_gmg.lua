@@ -30,10 +30,7 @@ outHierarchyFilePrefix = util.GetParam("-oh", "hierarchy_on_proc_")
 -- Create the domain and load a grid
 dom = Domain()
 
-if LoadDomain(dom, gridName) == false then
-	print("Loading of domain " .. gridName .. " failed. Aborting.")
-	exit() 
-end
+LoadDomain(dom, gridName)
 
 -- Now that we're here, the domain was successfully loaded
 print("Loaded domain from " .. gridName)

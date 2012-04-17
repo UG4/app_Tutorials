@@ -33,10 +33,7 @@ function CreateAndDistributeDomain(gridName, requiredSubsets)
 	
 --	Load the domain from file (Note that this is always performed on
 --	process 0)
-	if LoadDomain(dom, gridName) == false then
-		print("Loading of domain " .. gridName .. " failed.")
-		return nil
-	end
+	LoadDomain(dom, gridName)
 		
 --	Distribute the domain to all involved processes
 	if DistributeDomain(dom) == false then

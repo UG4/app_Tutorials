@@ -45,11 +45,7 @@ dom = Domain()
 -- LoadDomain tries to load the grid by interpreting the filename as an
 -- absolute path. If this doesn't work either, then the LoadDomain tries to
 -- load the grid relative to the grid-path (normally trunk/data/grids).
-if LoadDomain(dom, gridName) == false then
-	print("Loading of domain " .. gridName .. " failed. Aborting.")
---	call exit to leave the application right away.
-	exit() 
-end
+LoadDomain(dom, gridName)
 
 -- Now that we're here, the domain was successfully loaded
 print("Loaded domain from " .. gridName)
