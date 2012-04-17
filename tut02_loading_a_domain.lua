@@ -60,10 +60,7 @@ end
 
 -- Lets save the domain on each process
 outFileName = "distributedDomainOnProc" .. GetProcessRank() .. ".ugx"
-if SaveDomain(dom, outFileName) == false then
-	print("Saving of domain to " .. outFileName .. " failed. Aborting.")
-	exit()
-end
+SaveDomain(dom, outFileName)
 
 -- Everything seems to went fine.
 print("Saved domain to " .. outFileName)
