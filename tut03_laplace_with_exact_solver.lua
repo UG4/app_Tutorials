@@ -197,18 +197,11 @@ elemDisc:set_source("ourRhs"..dim.."d")						-- set the right hand side
 -- enforced either by other discretization objects (neumann) or through
 -- a post-process (dirichlet).
 
--- first we create objects that encapsulate our callbacks. Those can then
--- be registered at the discretization object. Note that we use the .. operator
--- to concatenate strings and numbers. This saves us from a lot of if dim == 2 ... else ...
--- For the dirichlet callback we use utilCreateLuaCondUserNumber, since here
--- a boolean and a number are returned.
-dirichletCallback = LuaCondUserNumber("ourDirichletBnd" .. dim .. "d")
-
 -- Here we set up such a dirichlet boundary condition. We specify the function
 -- names and the subsets for which the boundary condition shall apply. The function
 -- names have to correspond to the functions added to the approximation space above.
 dirichletBnd = DirichletBoundary()
-dirichletBnd:add(dirichletCallback, "c", "Boundary")
+dirichletBnd:add("ourDirichletBnd"..dim.."d", "c", "Boundary")
 
 -- Finally we create the discretization object which combines all the
 -- separate discretizations into one domain discretization.

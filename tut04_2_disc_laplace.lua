@@ -92,7 +92,7 @@ function AssembleLaplace(dom, innerSubsets, boundarySubsets, b,
 	local elemDisc = ConvectionDiffusion("c", innerSubsets)
 	elemDisc:set_disc_scheme("fv1")
 	elemDisc:set_upwind(NoUpwind())			 		-- set the upwind procedure
-	elemDisc:set_diffusion_tensor(tmpDiffCBName)	-- set the diffusion matrix callback
+	elemDisc:set_diffusion(tmpDiffCBName)			-- set the diffusion matrix callback
 	elemDisc:set_source(tmpRhsCBName)				-- set the right hand side callback
 	
 	local dirichletBnd = DirichletBoundary()

@@ -300,12 +300,9 @@ function ourDirichletBnd3d(x, y, z, t)
 	return true, 0.0
 end
 
--- ... and wrap it into a lua-callback
-dirichletCallback = LuaCondUserNumber("ourDirichletBnd" .. dim .. "d")
-
 -- lets setup the dirichlet values as explained in the previous tutorials
 dirichletBnd = DirichletBoundary()
-dirichletBnd:add(dirichletCallback, "c", "Boundary")
+dirichletBnd:add("ourDirichletBnd" .. dim .. "d", "c", "Boundary")
 
 ----------------------------------------------------
 -- Adding all Discretizations
