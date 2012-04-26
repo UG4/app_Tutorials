@@ -202,18 +202,13 @@ function DlinkDiffTensor3d_c(c)
 end
 
 -- Next we create a linker
-if 		dim == 1 then linkedDiffTensor = LuaUserFunctionMatrixNumber1d();
-elseif 	dim == 2 then linkedDiffTensor = LuaUserFunctionMatrixNumber2d();
-elseif 	dim == 3 then linkedDiffTensor = LuaUserFunctionMatrixNumber3d();
-else print("Choosen Dimension not supported. Exiting."); exit(); end
-
 -- We pass the lua-callback to the linker for the evaluation of the data. The
 -- second argument gives the number of inputs.
-linkedDiffTensor:set_lua_value_callback("linkDiffTensor"..dim.."d", 1);
+linkedDiffTensor = LuaUserFunctionMatrixNumber1d("linkDiffTensor"..dim.."d", 1);
 
 -- Now we have to assign also the derivative w.r.t to the input as an analytical
 -- lua function. Since we have only one input, we set the 0'th input derivative.
-linkedDiffTensor:set_lua_deriv_callback(0, "DlinkDiffTensor"..dim.."d_c");
+linkedDiffTensor:set_deriv(0, "DlinkDiffTensor"..dim.."d_c");
 
 -- Finally it remains to specify what the input should be. This is left open here
 -- but will be the concentration of our conv-diff equation. We cannot set it here
