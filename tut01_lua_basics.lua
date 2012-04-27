@@ -63,6 +63,12 @@ a = "5"
 b = tonumber(a)
 print(b + b)
 
+-- to check if a substring is contained in a string, you may use string.find.
+-- if the string is found, the indices where the substring starts and ends are
+-- returned (indices starting from 1). If the substring is not found, nil is returned.
+testStr = "Found something in here at: "
+a, b = string.find(testStr, "something")
+write(testStr, a, ", ", b, "\n")
 
 -- There are a lot of great tools to manipulate, split and tokenize strings
 -- in lua, including comprehensive pattern matching. It is definitley
