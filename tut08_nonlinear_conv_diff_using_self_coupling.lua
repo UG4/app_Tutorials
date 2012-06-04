@@ -397,7 +397,7 @@ end
 LuaStartValue = LuaUserNumber("StartValue"..dim.."d")
 
 -- Now interpolate the function
-InterpolateFunction(LuaStartValue, u, "c", time);
+Interpolate(LuaStartValue, u, "c", time);
 
 -- In order to plot our time steps, we need a VTK writer. For time dependent
 -- problems we start a time series. This is necessary to group the time 
