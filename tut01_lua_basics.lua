@@ -21,7 +21,6 @@
 
 
 
-
 --------------------------------------------------------------------------------
 -- Section 0: comments
 --------------------------------------------------------------------------------
@@ -29,8 +28,11 @@
 -- You may already have realized that lines starting with a -- are regarded
 -- as comments in lua. Of course a comment does not have to start at the
 -- beginning of a line but may be appended to a regular code statement.
-
-
+-- there are also
+--[[ 
+multi-line
+comments
+]]--
 
 
 --------------------------------------------------------------------------------
