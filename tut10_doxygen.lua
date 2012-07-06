@@ -57,7 +57,12 @@ end
 -- we need ug_util.lua for GetParam.
 ug_load_script("ug_util.lua")
 
+--! mu is the mean 
+--! \sa http://en.wikipedia.org/wiki/Mean
 mu    = util.GetParamNumber("-mu",    0, "mean (location of the peak")
+
+--! variance is a a measure of how far a set of numbers is spread out 
+--! \sa http://en.wikipedia.org/wiki/Variance
 sigma = util.GetParamNumber("-sigma", 3, "variance")
 
 -- these parameters will now be visible in the lua-documentation.
@@ -66,6 +71,11 @@ sigma = util.GetParamNumber("-sigma", 3, "variance")
 -- The string in the brackets is a description of the script.
 
 util.CheckAndPrintHelp("Doxygen tutorial and nice plotter")
+
+-- note that the third parameter of GetParamNumber is printed for the help
+-- it is also the _brief_ documentation of the parameter
+-- the doxygen comments before the line are the _detailed_ documentation
+-- and only visible on the doxygen docu.
 
 -- now for the fun part!
 
