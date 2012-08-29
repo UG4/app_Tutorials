@@ -335,10 +335,10 @@ linSolver = LU()
 
 -- Next we need a convergence check, that computes the defect within each 
 -- newton step and stops the iteration when a specified creterion is fullfilled.
--- For our purpose the StandardConvergenceCheck is sufficient. Please note,
+-- For our purpose the ConvCheck is sufficient. Please note,
 -- that this class derives from a general IConvergenceCheck-Interface and
 -- also more specialized or self-coded convergence checks could be used.
-newtonConvCheck = StandardConvergenceCheck()
+newtonConvCheck = ConvCheck()
 newtonConvCheck:set_maximum_steps(10)
 newtonConvCheck:set_minimum_defect(5e-8)
 newtonConvCheck:set_reduction(1e-10)

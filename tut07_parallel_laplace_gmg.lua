@@ -238,7 +238,7 @@ gmg:set_num_postsmooth(3)
 
 
 -- create Convergence Check
-convCheck = StandardConvergenceCheck()
+convCheck = ConvCheck()
 convCheck:set_maximum_steps(10000)
 convCheck:set_minimum_defect(1e-11)
 convCheck:set_reduction(1e-12)
