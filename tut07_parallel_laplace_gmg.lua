@@ -5,6 +5,9 @@
 -- interfaces. Those interfaces are created when a part of a grid is 
 -- distributed to other processes and further refined. Several interfaces 
 -- are e.g. created when a tree-like distribution is performed.
+-- 
+-- to run this code in parallel, use e.g.
+-- mpirun -np 4 ugshell -ex tutorials/tut07_parallel_laplace_gmg.lua
 --------------------------------------------------------------------------------
 -- include the basic util-methods.
 ug_load_script("ug_util.lua")
@@ -47,7 +50,9 @@ end
 
 --	This demonstration requires 4 processes
 if GetNumProcesses() < 4 then
-	print("At least 4 processes are required for this script. Aborting.")
+	print("At least 4 processes are required for this script. Run this script with e.g.")
+	print("mpirun -np 4 ugshell -ex tutorials/tut07_parallel_laplace_gmg.lua")
+	print("Aborting.")
 	exit()
 end
 
@@ -193,10 +198,6 @@ end
 print("subsets checked")
 ug_load_script("tut04_2_disc_laplace.lua")
 
--- Create surface functions (vectors) for Au=b (where A=linOp) and initialize them
-u = GridFunction(approxSpace)
-b = GridFunction(approxSpace)
-
 -- Using the AssembleLaplace method which we created in
 -- tut04_2_disc_laplace.lua, we now create the linear operator.
 -- Note that we use the default callbacks defined in tut04_2_disc_laplace.lua
@@ -210,6 +211,12 @@ linOp, approxSpace, domainDisc, dirichletBnd = AssembleLaplace(dom, "Inner", "Bo
 approxSpace:print_layout_statistic()
 
 print("Domain created.")
+
+
+-- Create surface functions (vectors) for Au=b (where A=linOp) and initialize them
+u = GridFunction(approxSpace)
+b = GridFunction(approxSpace)
+
 
 -- set initial value
 u:set(0)
