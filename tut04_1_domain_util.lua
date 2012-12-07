@@ -36,7 +36,7 @@ function CreateAndDistributeDomain(gridName, requiredSubsets)
 	LoadDomain(dom, gridName)
 		
 --	Distribute the domain to all involved processes
-	if DistributeDomain(dom) == false then
+	if util.DistributeDomain(dom) == false then
 		print("Error while Distributing Domain.")
 		return nil
 	end

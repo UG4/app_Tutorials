@@ -5,7 +5,7 @@
 --	In this tutorial however we'll take a look at how distribution can be controled
 --	in a more flexible way.
 --	We will thus take a look at how to prepare a PartitionMap and how to use
---	it in a call to RedistributeDomain.
+--	it in a call to DistributeDomain.
 --------------------------------------------------------------------------------
 
 -- include the basic util-methods.
@@ -96,12 +96,12 @@ end
 
 
 --	The partition map is set up. We can now distribute the domain.
---	RedistributeDomain takes three parameters: The domain, the
+--	DistributeDomain takes three parameters: The domain, the
 --	partitionMap, and a boolean indicating whether vertical interfaces
 --	shall be created.
 print("\nPERFORMING INITIAL DISTRIBUTION")
-if RedistributeDomain(dom, partitionMap, true) == false then
-	print("First redistribution failed. Please check your partitionMap.")
+if DistributeDomain(dom, partitionMap, true) == false then
+	print("First distribution failed. Please check your partitionMap.")
 	exit()
 end
 
@@ -142,7 +142,7 @@ end
 
 --	The partition map is set up. We can now redistribute the domain
 print("\nPERFORMING REDISTRIBUTION")
-if RedistributeDomain(dom, partitionMap, true) == false then
+if DistributeDomain(dom, partitionMap, true) == false then
 	print("Second redistribution failed. Please check your partitionMap.")
 	exit()
 end
