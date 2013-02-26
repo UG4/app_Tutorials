@@ -182,8 +182,7 @@ approxSpace:add_fct("c", "Lagrange", 1)          -- adds one function
 upwind = WeightedUpwind(); upwind:set_weight(0.0)
 --upwind = PartialUpwind()
  
-elemDisc = ConvectionDiffusion("c", "Inner")
-elemDisc:set_disc_scheme("fv1")
+elemDisc = ConvectionDiffusion("c", "Inner", "fv1")
 elemDisc:set_upwind(upwind)
 elemDisc:set_diffusion("ourDiffTensor"..dim.."d")	-- set the diffusion matrix
 elemDisc:set_source("ourRhs"..dim.."d")						-- set the right hand side
