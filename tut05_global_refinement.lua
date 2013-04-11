@@ -19,8 +19,7 @@ dim = util.GetParamNumber("-dim", 2)
 -- you do in an ug-script. The cpu-algebra is fine for now.
 InitUG(dim, AlgebraType("CPU", 1))
 
-gridName = util.GetParam("-grid", "unit_square/unit_square_quads_8x8.ugx")
-outFileNamePrefix = util.GetParam("-o", "distributed_domain_")
+gridName = util.GetParam("-grid", "rect_with_circular_cutout.ugx")
 
 -- We will save the created hierarchy to this file (with appended process id)
 outHierarchyFilePrefix = util.GetParam("-oh", "hierarchy_on_proc_")
@@ -57,6 +56,19 @@ print("Loaded domain from " .. gridName)
 -- subject to a later tutorial.
 refiner = GlobalDomainRefiner(dom)
 
+-- The loaded domain features a circular cutout. The edges at the coutout rim
+-- are located in the subset with name "circle". We want to add a projector,
+-- which projects newly generated points on this circle with center at (1, 0, 0),
+-- and a radius of 0.5.
+-- Furthermore we use a subdivision loop projector on the interior of the domain
+-- to improve the aspect ratio of refined triangles.
+-- On each subset for which no callback was specified, the standard linerar interpolation
+-- is used.
+refProjector = DomainRefinementProjectionHandler(dom)
+refProjector:set_callback("circle", SphereProjector(dom, 1, 0, 0, 0.5))
+refProjector:set_callback("inner", SubdivisionLoopProjector(dom))
+refiner:set_refinement_callback(refProjector)
+
 -- perform pre-refinement
 for i = 1, numPreRefs do
 	refiner:refine()
@@ -76,22 +88,13 @@ for i = 1, numPostRefs do
 end
 
 
--- Lets save the domain on each process
-outFileName = outFileNamePrefix .. GetProcessRank() .. ".ugx"
-SaveDomain(dom, outFileName)
-
--- Everything seems to went fine.
-print("Saved domain to " .. outFileName)
-
-
 -- Now lets save the hierarchy on each process
 -- The SaveGridHierarchy routine directly works on the domains grid.
 -- We can access the grid of a domain through its grid() member method.
---
--- SaveGridHierarchy outputs a grid, where each level is assigned to a subset.
--- Original subsets are not contained in that file.
+-- SaveGridHierarchyTransformed outputs a grid, where each level is moved a little
+-- along the z axis. In this example by 0.1 per level.
 outFileName = outHierarchyFilePrefix .. GetProcessRank() .. ".ugx"
-if SaveGridHierarchy(dom:grid(), outFileName) == false then
+if SaveGridHierarchyTransformed(dom:grid(), dom:subset_handler(), outFileName, 0.1) == false then
 	print("Saving of grid-hierarch to " .. outFileName .. " failed. Aborting.")
 	exit()
 end
