@@ -4,7 +4,7 @@
 --	This tutorial requires the 'promesh' plugin. If you're building ug from
 --	source, make sure to call cmake with -Dpromesh=ON
 --
---	The tutorial will show how a circular geometry filled nicely shaped
+--	The tutorial will show how a circular geometry filled with nicely shaped
 --	triangles can be generated. Also subset assignment is performed.
 --	The resulting geometry is then ready for simulation.
 --------------------------------------------------------------------------------
