@@ -16,7 +16,7 @@ ug_load_script("ug_util.lua")
 -- Depending on the dimension we will choose our domain object
 -- (either 1d, 2d or 3d) and associated discretization objects. Note that
 -- we're using some methods defined in "ug_util.lua" here.
-dim = util.GetParamNumber("-dim", 1) -- default dimension is 1.
+dim = util.GetParamNumber("-dim", 2) -- default dimension is 2.
 
 -- Since ug supports a bunch of different dimensions and algebra modules 
 -- we will choose a combination here. This should always be the first thing 
@@ -39,7 +39,7 @@ numTimeSteps = util.GetParamNumber("-numTimeSteps", 10) -- default dimension is 
 
 -- We additionally use parameters which allow to specify the number of
 -- pre- and total-refinement steps (wrt domain distribution).
-numPreRefs = util.GetParamNumber("-numPreRefs", 0)
+numPreRefs = util.GetParamNumber("-numPreRefs", 1)
 numTotalRefs = util.GetParamNumber("-numTotalRefs", 3)
 
 -- Calculate the number of post-refs and make sure that the result makes sense.
@@ -49,6 +49,9 @@ if numPostRefs < 0 then
 	print("\t\t\tNo refinement will be preformed after distribution.")
 	numPostRefs = 0
 end
+
+util.CheckAndPrintHelp("Time-dependent non-linear convection diffusion example");
+
 
 
 -- Now its time to create the domain object. We will use an util method here,
@@ -204,7 +207,7 @@ end
 -- Next we create a linker
 -- We pass the lua-callback to the linker for the evaluation of the data. The
 -- second argument gives the number of inputs.
-linkedDiffTensor = LuaUserFunctionMatrixNumber1d("linkDiffTensor"..dim.."d", 1);
+linkedDiffTensor = LuaUserFunctionMatrixNumber("linkDiffTensor"..dim.."d", 1);
 
 -- Now we have to assign also the derivative w.r.t to the input as an analytical
 -- lua function. Since we have only one input, we set the 0'th input derivative.
@@ -329,8 +332,24 @@ op:init()
 ----------------------------------------------------
 
 -- we need a linear solver that solves the linearized problem inside of the
--- newton solver iteration. So, we create an exact LU solver here.
-linSolver = LU()
+-- newton solver iteration. We use a geometric multi-grid method with
+-- Jacobi smoothing and an LU base-solver.
+baseSolver = LU()
+
+gmg = GeometricMultiGrid(approxSpace)
+gmg:set_discretization(domainDisc)
+gmg:set_base_solver(baseSolver)
+gmg:set_parallel_base_solver(false)
+gmg:set_smoother(Jacobi(1.0))
+gmg:set_cycle_type(1)
+gmg:set_num_presmooth(3)
+gmg:set_num_postsmooth(3)
+
+linSolver = LinearSolver()
+linSolver:set_preconditioner(gmg)
+linSolver:set_convergence_check(ConvCheck(100, 1e-12, 1e-12))
+linSolver:set_compute_fresh_defect_when_finished(true)
+
 
 -- Next we need a convergence check, that computes the defect within each 
 -- newton step and stops the iteration when a specified creterion is fullfilled.
