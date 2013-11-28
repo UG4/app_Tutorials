@@ -383,6 +383,9 @@ newtonSolver:set_convergence_check(newtonConvCheck)
 -- Newton solver for this operator.
 newtonSolver:init(op)
 
+-- since solver configurations can be quite complex, we print the configuration:
+print("NewtonSolver configuration:")
+print(newtonSolver:config_string())
 ----------------------------------------------------
 ----------------------------------------------------
 -- Time loop
