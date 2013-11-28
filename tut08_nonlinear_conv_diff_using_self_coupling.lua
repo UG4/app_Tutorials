@@ -42,6 +42,9 @@ numTimeSteps = util.GetParamNumber("-numTimeSteps", 10) -- default dimension is 
 numPreRefs = util.GetParamNumber("-numPreRefs", 1)
 numTotalRefs = util.GetParamNumber("-numTotalRefs", 3)
 
+-- with this parameter we can specify on which gmg level we want to use the direct solver
+baseLevel= util.GetParamNumber("-baseLevel", 0)
+
 -- Calculate the number of post-refs and make sure that the result makes sense.
 numPostRefs = numTotalRefs - numPreRefs
 if numPostRefs < 0 then
@@ -339,6 +342,7 @@ baseSolver = LU()
 gmg = GeometricMultiGrid(approxSpace)
 gmg:set_discretization(domainDisc)
 gmg:set_base_solver(baseSolver)
+gmg:set_base_level(baseLevel)
 gmg:set_gathered_base_solver_if_ambiguous(true)
 gmg:set_smoother(Jacobi(1.0))
 gmg:set_cycle_type(1)
