@@ -93,7 +93,7 @@ end
 -- We can access the grid of a domain through its grid() member method.
 -- SaveGridHierarchyTransformed outputs a grid, where each level is moved a little
 -- along the z axis. In this example by 0.1 per level.
-outFileName = outHierarchyFilePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outHierarchyFilePrefix .. ProcRank() .. ".ugx"
 if SaveGridHierarchyTransformed(dom:grid(), dom:subset_handler(), outFileName, 0.1) == false then
 	print("Saving of grid-hierarch to " .. outFileName .. " failed. Aborting.")
 	exit()

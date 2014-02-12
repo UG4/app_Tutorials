@@ -60,7 +60,7 @@ linOp:init_op_and_rhs(b)
 
 -- We again choose the LU solver and make sure that it is only used in a
 -- serial environment
-if GetNumProcesses() > 1 then
+if NumProcs() > 1 then
 	print("Can't apply LU decomposition in parallel environment. Aborting.")
 	exit()
 end

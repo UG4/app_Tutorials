@@ -81,7 +81,7 @@ for i=1,numPreRefs do
 end
 
 -- get number of processes
-numProcs = GetNumProcesses()
+numProcs = NumProcs()
 
 -- Distribute the domain to all involved processes
 -- Since only process 0 loaded the grid, it is the only one which has to
@@ -92,7 +92,7 @@ if numProcs > 1 then
 	print("Distribute domain with 'distributionType' = " .. distributionType .. "...")
 	partitionMap = PartitionMap()
 	
-	if GetProcessRank() == 0 then
+	if ProcRank() == 0 then
 		if distributionType == "bisect" then
 			util.PartitionMapBisection(dom, partitionMap, numProcs)
 			
@@ -111,8 +111,8 @@ if numProcs > 1 then
 
 	-- save the partition map for debug purposes
 		if verbosity >= 1 then
-			print("saving partition map to 'partitionMap_p" .. GetProcessRank() .. ".ugx'")
-			SavePartitionMap(partitionMap, dom, "partitionMap_p" .. GetProcessRank() .. ".ugx")
+			print("saving partition map to 'partitionMap_p" .. ProcRank() .. ".ugx'")
+			SavePartitionMap(partitionMap, dom, "partitionMap_p" .. ProcRank() .. ".ugx")
 		end
 	end
 	
@@ -148,11 +148,11 @@ end
 
 -- write grid to file for test purpose
 if verbosity >= 1 then
-	refinedGridOutName = "refined_grid_p" .. GetProcessRank() .. ".ugx"
+	refinedGridOutName = "refined_grid_p" .. ProcRank() .. ".ugx"
 	print("saving domain to " .. refinedGridOutName)
 	SaveDomain(dom, refinedGridOutName)
 	
-	hierarchyOutName = "hierachy_p" .. GetProcessRank() .. ".ugx"
+	hierarchyOutName = "hierachy_p" .. ProcRank() .. ".ugx"
 	print("saving hierachy to " .. hierarchyOutName)
 	if SaveGridHierarchy(dom:grid(), hierarchyOutName) == false then
 		print("Saving of domain to " .. hierarchyOutName .. " failed. Aborting.")

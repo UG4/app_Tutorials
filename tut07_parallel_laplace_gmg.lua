@@ -49,7 +49,7 @@ for i = 1, numPreRefs do
 end
 
 --	This demonstration requires 4 processes
-if GetNumProcesses() < 4 then
+if NumProcs() < 4 then
 	print("At least 4 processes are required for this script. Run this script with e.g.")
 	print("mpirun -np 4 ugshell -ex tutorials/tut07_parallel_laplace_gmg.lua")
 	print("Aborting.")
@@ -61,7 +61,7 @@ end
 partitionMap = PartitionMap()
 
 --	We'll also store the rank of the current process
-procRank = GetProcessRank()
+procRank = ProcRank()
 
 --	first we'll distribute sections of the domain to processes 0, 4, 8 and 12
 --firstTargets = {0, 4, 8, 12}
@@ -163,7 +163,7 @@ for i = 1, numPostRefs do
 end
 
 -- Lets save the domain on each process
-outFileName = outFileNamePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outFileNamePrefix .. ProcRank() .. ".ugx"
 SaveDomain(dom, outFileName)
 
 -- Everything seems to went fine.
@@ -176,7 +176,7 @@ print("Saved domain to " .. outFileName)
 --
 -- SaveGridHierarchy outputs a grid, where each level is assigned to a subset.
 -- Original subsets are not contained in that file.
-outFileName = outHierarchyFilePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outHierarchyFilePrefix .. ProcRank() .. ".ugx"
 if SaveGridHierarchy(dom:grid(), outFileName) == false then
 	print("Saving of grid-hierarch to " .. outFileName .. " failed. Aborting.")
 	exit()

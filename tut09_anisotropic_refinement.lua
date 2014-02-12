@@ -91,7 +91,7 @@ end
 
 
 -- Lets save the domain on each process
-outFileName = outFileNamePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outFileNamePrefix .. ProcRank() .. ".ugx"
 SaveDomain(dom, outFileName) 
 
 -- Everything seems to went fine.
@@ -104,7 +104,7 @@ print("Saved domain to " .. outFileName)
 --
 -- SaveGridHierarchy outputs a grid, where each level is assigned to a subset.
 -- Original subsets are not contained in that file.
-outFileName = outHierarchyFilePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outHierarchyFilePrefix .. ProcRank() .. ".ugx"
 if SaveGridHierarchy(dom:grid(), outFileName) == false then
 	print("Saving of grid-hierarch to " .. outFileName .. " failed. Aborting.")
 	exit()

@@ -65,7 +65,7 @@ end
 
 
 -- Lets save the domain on each process
-outFileName = outFileNamePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outFileNamePrefix .. ProcRank() .. ".ugx"
 SaveDomain(dom, outFileName)
 
 -- Everything seems to went fine.
@@ -236,8 +236,8 @@ u:set(0)
 -- We need a solver to solve the system. Since we want an exact solution,
 -- we simply use the LU solver.
 -- But be careful... if we are in a parallel environment, the LU decomposition
--- will not work. We use GetNumProcesses() to retrieve the number of active processes.
-if GetNumProcesses() > 1 then
+-- will not work. We use NumProcs() to retrieve the number of active processes.
+if NumProcs() > 1 then
 	print("Can't apply LU decomposition in a parallel environment. Aborting.")
 	exit()
 end

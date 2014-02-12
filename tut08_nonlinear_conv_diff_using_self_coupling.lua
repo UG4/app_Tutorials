@@ -98,7 +98,7 @@ for i = 1, numPostRefs do
 end
 
 -- Lets save the domain on each process
-outFileName = outFileNamePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outFileNamePrefix .. ProcRank() .. ".ugx"
 SaveDomain(dom, outFileName)
 
 -- Everything seems to went fine.

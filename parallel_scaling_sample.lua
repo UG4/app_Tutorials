@@ -193,7 +193,7 @@ procs	numPreRefs	numRefs	startTime	endTime	dt  ...
 		-- below is only an example
 		stats = 
 		{	
-			{ "procs", GetNumProcesses() },
+			{ "procs", NumProcs() },
 			{ "numPreRefs", numPreRefs},
 			{ "numRefs", numRefs },
 			{ "startTime", startTime},

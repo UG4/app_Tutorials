@@ -51,7 +51,7 @@ end
 --	New code starts here
 
 --	This demonstration requires 16 processes
-if GetNumProcesses() < 16 then
+if NumProcs() < 16 then
 	print("At least 16 processes are required for this script. Aborting.")
 	exit()
 end
@@ -61,7 +61,7 @@ end
 partitionMap = PartitionMap()
 
 --	We'll also store the rank of the current process
-procRank = GetProcessRank()
+procRank = ProcRank()
 
 --	first we'll distribute sections of the domain to processes 0, 4, 8 and 12
 firstTargets = {0, 4, 8, 12}
@@ -169,7 +169,7 @@ end
 
 
 -- Lets save the domain on each process
-outFileName = outFileNamePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outFileNamePrefix .. ProcRank() .. ".ugx"
 SaveDomain(dom, outFileName)
 
 -- Everything seems to went fine.
@@ -182,7 +182,7 @@ print("Saved domain to " .. outFileName)
 --
 -- SaveGridHierarchy outputs a grid, where each level is assigned to a subset.
 -- Original subsets are not contained in that file.
-outFileName = outHierarchyFilePrefix .. GetProcessRank() .. ".ugx"
+outFileName = outHierarchyFilePrefix .. ProcRank() .. ".ugx"
 if SaveGridHierarchy(dom:grid(), outFileName) == false then
 	print("Saving of grid-hierarch to " .. outFileName .. " failed. Aborting.")
 	exit()

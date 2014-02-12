@@ -59,7 +59,7 @@ end
 
 
 -- Lets save the domain on each process
-outFileName = "distributedDomainOnProc" .. GetProcessRank() .. ".ugx"
+outFileName = "distributedDomainOnProc" .. ProcRank() .. ".ugx"
 SaveDomain(dom, outFileName)
 
 -- Everything seems to went fine.
