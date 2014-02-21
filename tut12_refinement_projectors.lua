@@ -41,13 +41,12 @@ end
 --	Call the adaption method for different grids and different projectors
 if IsDefinedUG_DIM_2() then
 	--	We'll start with a simple circle and use a sphere projector on the whole domain.
-	--	Arguments to the sphere projector are the domain and it's center. The center
-	--	is always specified with 3 coordinates, even in 2d.
+	--	Arguments to the sphere projector are the domain and it's center.
 	local dom = Domain2d()
 	print("loading " .. "grids/circle.ugx")
 	LoadDomain(dom, "grids/circle.ugx")
 	PerformAdaption(dom, "circle_out.ugx",
-					SphereProjector(dom, 0, 0, 0), 1)
+					SphereProjector(dom, {0, 0}), 1)
 	
 	
 	--	Next we'll refine a rect with a single cutout. We want the cutout to converge
@@ -57,13 +56,13 @@ if IsDefinedUG_DIM_2() then
 	--	are handled with spherical projection, all vertices outside outer radius are
 	--	handled with linear projection. In between a smooth transition between
 	--	spherical and linear projection is performed.
-	--	In this case the center is at (0, 0, 0), the innerRadius is 0.5 and the
+	--	In this case the center is at (0, 0), the innerRadius is 0.5 and the
 	--	outerRadius is 1
 	dom = Domain2d()
 	print("loading " .. "grids/rect_with_cutout.ugx")
 	LoadDomain(dom, "grids/rect_with_cutout.ugx")
 	PerformAdaption(dom, "rect_with_cutout_out.ugx",
-					SphericalFalloffProjector(dom, 0, 0, 0, 0.5, 1), 1)
+					SphericalFalloffProjector(dom, {0, 0}, 0.5, 1), 1)
 	
 	
 	--	Now we'll use two different projectors to refine a geometry with two
@@ -73,8 +72,8 @@ if IsDefinedUG_DIM_2() then
 	print("loading " .. "grids/rect_with_two_cutouts.ugx")
 	LoadDomain(dom, "grids/rect_with_two_cutouts.ugx")
 	local projHandler = DomainRefinementProjectionHandler(dom)
-	projHandler:set_callback("Inner1", SphericalFalloffProjector(dom, 0, 0, 0, 0.5, 1))
-	projHandler:set_callback("Inner2", SphericalFalloffProjector(dom, 2, 0, 0, 0.5, 1))
+	projHandler:set_callback("Inner1", SphericalFalloffProjector(dom, {0, 0}, 0.5, 1))
+	projHandler:set_callback("Inner2", SphericalFalloffProjector(dom, {2, 0}, 0.5, 1))
 	PerformAdaption(dom, "rect_with_two_cutouts_out.ugx", projHandler, 1)
 end
 
@@ -86,7 +85,7 @@ if IsDefinedUG_DIM_3() then
 	print("loading " .. "grids/cube.ugx")
 	LoadDomain(dom, "grids/cube.ugx")
 	PerformAdaption(dom, "cube_out.ugx",
-					SphereProjector(dom, 0, 0, 0), 4)
+					SphereProjector(dom, {0, 0, 0}), 4)
 
 
 	--	Now we'll load a cylinder and use the cylinder-projector during refinement.
@@ -96,7 +95,7 @@ if IsDefinedUG_DIM_3() then
 	print("loading " .. "grids/cylinder.ugx")
 	LoadDomain(dom, "grids/cylinder.ugx")
 	PerformAdaption(dom, "cylinder_out.ugx",
-					CylinderProjector(dom, 0, 0, 0, 0, 0, 1), 3)
+					CylinderProjector(dom, {0, 0, 0}, {0, 0, 1}), 3)
 
 
 	--	If only a part of the domain shall be refined as a cylinder, we'll
@@ -110,5 +109,5 @@ if IsDefinedUG_DIM_3() then
 	print("loading " .. "grids/box_with_cutout.ugx")
 	LoadDomain(dom, "grids/box_with_cutout.ugx")
 	PerformAdaption(dom, "box_with_cutout_out.ugx",
-					CylindricalFalloffProjector(dom, 0, 0, 0, 0, 0, 1, 0.5, 1), 3)
+					CylindricalFalloffProjector(dom, {0, 0, 0}, {0, 0, 1}, 0.5, 1), 3)
 end

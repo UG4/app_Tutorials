@@ -58,7 +58,7 @@ refiner = GlobalDomainRefiner(dom)
 
 -- The loaded domain features a circular cutout. The edges at the coutout rim
 -- are located in the subset with name "circle". We want to add a projector,
--- which projects newly generated points on this circle with center at (1, 0, 0).
+-- which projects newly generated points on this circle with center at (1, 0).
 -- The radius is automatically determined by the distance of the parents corners
 -- to the center of the sphere.
 -- Furthermore we use a subdivision loop projector on the interior of the domain
@@ -66,7 +66,7 @@ refiner = GlobalDomainRefiner(dom)
 -- On each subset for which no callback was specified, the standard linerar interpolation
 -- is used.
 refProjector = DomainRefinementProjectionHandler(dom)
-refProjector:set_callback("circle", SphereProjector(dom, 1, 0, 0))
+refProjector:set_callback("circle", SphereProjector(dom, {1, 0}))
 refProjector:set_callback("inner", SubdivisionLoopProjector(dom))
 refiner:set_refinement_callback(refProjector)
 
