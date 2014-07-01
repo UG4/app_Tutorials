@@ -2,7 +2,7 @@
 --	tut11_geometry_generation.lua
 --
 --	This tutorial requires the 'promesh' plugin. If you're building ug from
---	source, make sure to call cmake with -Dpromesh=ON
+--	source, make sure to call cmake with -DProMesh=ON
 --
 --	The tutorial will show how a circular geometry filled with nicely shaped
 --	triangles can be generated. Also subset assignment is performed.
