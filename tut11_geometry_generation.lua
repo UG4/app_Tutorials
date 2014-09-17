@@ -10,35 +10,35 @@
 --------------------------------------------------------------------------------
 
 --	Create a MeshObject first. All promesh-methods operate on a MeshObject
-obj = PM_MeshObject()
+obj = MeshObject()
 
 
 --	This method creates a circle with center (0, 0, 0), radius 2,
 --	64 rim-vertices, subset-index 0 and fills the interior with triangles.
-PM_CreateCircle(obj, MakeVec(0, 0, 0), 2, 64, 0, true)
+CreateCircle(obj, MakeVec(0, 0, 0), 2, 64, 0, true)
 
 
 --	Retriangulation leads to a minimal inner angle of 30°. Smoothing
 --	will move the vertices a little so that the grid appears 'smoother'.
-PM_SelectAll(obj)
-PM_Retriangulate(obj, 30)
-PM_ClearSelection(obj)
-PM_SelectInnerVertices(obj)
-PM_LaplacianSmooth(obj, 0.1, 10)
+SelectAll(obj)
+Retriangulate(obj, 30)
+ClearSelection(obj)
+SelectInnerVertices(obj)
+LaplacianSmooth(obj, 0.1, 10)
 
 
 --	Now we'll assign subsets so that the resulting grid is ready for simulation
 --	with ug4.
-PM_SelectAll(obj)
-PM_AssignSubset(obj, 0)
-PM_SetSubsetName(obj, 0, "inner")
-PM_ClearSelection(obj)
-PM_SelectBoundaryEdges(obj)
-PM_SelectAssociatedVertices(obj)
-PM_AssignSubset(obj, 1)
-PM_SetSubsetName(obj, 1, "boundary")
-PM_AssignSubsetColors(obj)
+SelectAll(obj)
+AssignSubset(obj, 0)
+SetSubsetName(obj, 0, "inner")
+ClearSelection(obj)
+SelectBoundaryEdges(obj)
+SelectAssociatedVertices(obj)
+AssignSubset(obj, 1)
+SetSubsetName(obj, 1, "boundary")
+AssignSubsetColors(obj)
 
 
 --	Finally save the resulting mesh to a file
-PM_SaveMesh(obj, "tut11-circle.ugx")
+SaveMesh(obj, "tut11-circle.ugx")
