@@ -9,8 +9,8 @@
 --	The resulting geometry is then ready for simulation.
 --------------------------------------------------------------------------------
 
---	Create a MeshObject first. All promesh-methods operate on a MeshObject
-obj = MeshObject()
+--	Create a Mesh first. All promesh-methods operate on a Mesh
+obj = Mesh()
 
 
 --	This method creates a circle with center (0, 0, 0), radius 2,
