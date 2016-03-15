@@ -50,7 +50,7 @@ end
 
 util.CheckAndPrintHelp("Parallel Scaling example\nMartin Rupp, Andreas Vogel");
 
-if dim == 2 then gridName = util.GetParam("-grid", "unit_square_01/unit_square_01_tri_2x2.ugx")
+if dim == 2 then gridName = util.GetParam("-grid", "grids/unit_square_01_tri_2x2.ugx")
 else print("Dimension "..dim.." not supported."); exit(); end
 
 print(" Choosen Parater:")
@@ -138,24 +138,29 @@ domainDisc:add(dirichletBND)
 --------------------------------------------------------------------------------
 print (">> Setting up Algebra Solver")
 
-linSolver = util.GetSolver( {
-		name = "linear",
-		precond = {
-			name = "gmg",
-			gmg_approxSpace = approxSpace,
-			gmg_smoother = {
-				name = "jac",
-				jac_damp = 0.8 } },
-		convCheck = {
-			maxSteps = 100,
-			minDef = 1e-9,
-			reduction = 1e-12 }
-	} )
+solverDesc = {
+	type = "linear",
+	precond = {
+		type 		= "gmg",
+		approxSpace = approxSpace,
+		smoother 	= {
+			type		= "jac",
+			damping 	= 0.8
+		},
+		cycle		= "V",
+		preSmooth	= 2,
+		postSmooth 	= 2,
+		baseSolver 	= "lu"
+	},
+	convCheck = {
+		type		= "standard",
+		iterations	= 100,
+		absolute	= 1e-9,
+		reduction	= 1e-12
+	}
+}
 
--- create Newton Solver
-newtonSolver = NewtonSolver()
-newtonSolver:set_linear_solver(linSolver)
-newtonSolver:set_convergence_check(ConvCheck(10, 5e-8, 1e-10, true))
+solver = util.solver.CreateSolver(solverDesc)
 
 --------------------------------------------------------------------------------
 --  Apply Solver
@@ -166,11 +171,7 @@ print(">> Interpolation start values")
 u = GridFunction(approxSpace)
 Interpolate("exactSolution", u, "c", startTime)
 
--- perform time loop
---util.SolveNonlinearTimeProblem(u, domainDisc, newtonSolver, VTKOutput(), "Sol",
---							   "ImplEuler", 1, startTime, endTime, dt); 
-
-util.SolveLinearTimeProblem(u, domainDisc, linSolver, VTKOutput(), "Sol",
+util.SolveLinearTimeProblem(u, domainDisc, solver, VTKOutput(), "Sol",
 							"ImplEuler", 1, startTime, endTime, dt); 
 
 
@@ -228,8 +229,6 @@ procs	numPreRefs	numRefs	startTime	endTime	dt  ...
 	
 	-- PARALLEL SCALING }-
 end
-
-FreeUserData()
 
 -- end group app_convdiff
 --[[!
